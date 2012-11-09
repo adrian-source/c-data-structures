@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -85,6 +84,8 @@ void delete(int key, struct node* tree)
 			{
 				printf("deleting leaf... %d\n", tree->key);
 				printf("%xn\n", &tree);
+				free(tree);
+
 			}
 		}
 		else if (key < tree->key)
