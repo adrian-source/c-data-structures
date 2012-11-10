@@ -9,6 +9,93 @@ struct node{
 	int key;
 };
 
+int height(struct node* tree)
+{
+	if (tree == 0)
+		return 0;
+	else
+	{
+		int lower = 1 + height(tree->lower);
+		int higher = 1 + height(tree->higher);
+		return (lower > higher) ? lower : higher;
+	}
+}
+
+int factor(struct node* tree)
+{
+	int l = height(tree->lower);
+	int r = height(tree->higher);
+	return l - r;
+}
+
+struct node* rot_ll(struct node* tree)
+{
+	printf("rot LL %d\n", tree->key);
+
+	struct node* temp; // new root
+	temp = tree->lower;	
+	tree->lower = temp->higher;
+	temp->higher = tree;
+	
+	return temp;
+}
+
+struct node* rot_rr(struct node* tree)
+{
+	printf("rot RR %d\n", tree->key);
+
+	struct node* temp; // new root
+	temp = tree->higher;
+	tree->higher = temp->lower;
+	temp->lower = tree;
+
+	return temp;
+}
+
+struct node* rot_lr(struct node* tree)
+{
+	printf("rot LR %d\n", tree->key);
+
+	struct node* temp; // new root
+	temp = tree->lower;
+	tree->lower = rot_rr(temp);
+
+	return rot_ll(tree);
+}
+
+struct node* rot_rl(struct node* tree)
+{
+	printf("rot RL %d\n", tree->key);
+
+	struct node* temp; // new root
+	temp = tree->lower;
+	tree->lower = rot_ll(temp);
+
+	return rot_rr(tree);
+}
+
+// returns new tree head
+struct node* balance(struct node* tree)
+{
+	int f = factor(tree);
+	printf("b factor %d\n", f);
+	if (f > 1)
+	{
+		if (factor(tree->lower) > 0)
+			return rot_ll(tree);
+		else
+			return rot_lr(tree);
+	}
+	else if (f < -1)
+	{
+		if (factor(tree->higher) > 0)
+			return rot_rl(tree);
+		else
+			return rot_rr(tree);
+	}
+
+	return tree;
+}
 
 void insert (int key, struct node** tree)
 {
@@ -31,6 +118,9 @@ void insert (int key, struct node** tree)
 		printf("i higher...\n");
 		insert(key, &(*tree)->higher);
 	}
+
+	*tree = balance(*tree);
+
 }
 
 
@@ -38,12 +128,17 @@ void print (struct node** tree)
 {
 	
 	if ((*tree)->lower != 0)
+	{
+		printf("/\n");
 		print(&(*tree)->lower);
-	
+	}
 	printf("%d \n", (*tree)->key);
 
 	if ((*tree)->higher != 0)
+	{	
+		printf("\\\n");
 		print(&(*tree)->higher);
+	}
 }
 
 
@@ -102,9 +197,26 @@ void delete(int key, struct node** tree)
 }
 
 
+
+
+
 int main()
 {
 	struct node* tree;
+	tree->key = 50;
+	tree->lower = 0;
+	tree->higher = 0;
+
+	insert(40, &tree);
+	insert(45, &tree);
+	insert(30, &tree);
+	insert(35, &tree);
+	insert(60, &tree);
+
+
+	print(&tree);
+
+	/*
 	tree->key = 50;
 	tree->lower = 0;
 	tree->higher = 0;
@@ -118,7 +230,10 @@ int main()
 
 	delete(50, &tree);
 
+	printf("height... %d\n", height(tree));
+
 	printf("printing...\n");
 
 	print(&tree);
+	*/
 }
