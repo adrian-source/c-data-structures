@@ -69,11 +69,9 @@ void delete(int key, struct node** tree)
 				(*tree)->key = (*replacement)->key;
 				if ((*replacement)->lower != 0)
 					(*replacement) = (*replacement)->lower;
-				else
-				{
-					free(*replacement);
-					(*replacement) = NULL;
-				}
+
+				free(*replacement);
+				(*replacement) = NULL;
 			}
 			else if ((*tree)->lower != 0 || (*tree)->higher != 0)
 			{
