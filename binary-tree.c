@@ -28,75 +28,6 @@ int factor(struct node* tree)
 	return l - r;
 }
 
-struct node* rot_ll(struct node* tree)
-{
-	printf("rot LL %d\n", tree->key);
-
-	struct node* temp; // new root
-	temp = tree->lower;	
-	tree->lower = temp->higher;
-	temp->higher = tree;
-	
-	return temp;
-}
-
-struct node* rot_rr(struct node* tree)
-{
-	printf("rot RR %d\n", tree->key);
-
-	struct node* temp; // new root
-	temp = tree->higher;
-	tree->higher = temp->lower;
-	temp->lower = tree;
-
-	return temp;
-}
-
-struct node* rot_lr(struct node* tree)
-{
-	printf("rot LR %d\n", tree->key);
-
-	struct node* temp; // new root
-	temp = tree->lower;
-	tree->lower = rot_rr(temp);
-
-	return rot_ll(tree);
-}
-
-struct node* rot_rl(struct node* tree)
-{
-	printf("rot RL %d\n", tree->key);
-
-	struct node* temp; // new root
-	temp = tree->lower;
-	tree->lower = rot_ll(temp);
-
-	return rot_rr(tree);
-}
-
-// returns new tree head
-struct node* balance(struct node* tree)
-{
-	int f = factor(tree);
-	printf("b factor %d\n", f);
-	if (f > 1)
-	{
-		if (factor(tree->lower) > 0)
-			return rot_ll(tree);
-		else
-			return rot_lr(tree);
-	}
-	else if (f < -1)
-	{
-		if (factor(tree->higher) > 0)
-			return rot_rl(tree);
-		else
-			return rot_rr(tree);
-	}
-
-	return tree;
-}
-
 void insert (int key, struct node** tree)
 {
 
@@ -118,9 +49,6 @@ void insert (int key, struct node** tree)
 		printf("i higher...\n");
 		insert(key, &(*tree)->higher);
 	}
-
-	*tree = balance(*tree);
-
 }
 
 
