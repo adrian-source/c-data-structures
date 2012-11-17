@@ -15,50 +15,53 @@ void init_node(struct node* n)
 
 void add(struct node* n, char* word, int size)
 {
-	printf("size %d, eow %d \n", size, n->eow);
 	if (size == 0)
 	{
 		return;
 	}
 	else
 	{
-
-		printf("adding %s, position %d \n", word, word[0]-'A');
 		if (word[0] - 'A' < 'A' && word[0] - 'A' > 'Z')
 		{
 			printf("ERROR\n");
 			return;
 		}
-		printf("%d\n", n->eow);
 		if(!n->branch[word[0] - 'A'])
 		{
-			printf("creating new node...\n");
 			struct node* newnode = (struct node*)malloc(sizeof(struct node));
 			init_node(newnode);
 			n->branch[word[0] - 'A'] = newnode;
 			if (size == 1)
 				n->branch[word[0] - 'A']->eow = 1;
-			printf(".\n");
 		}
 		add(n->branch[word[0]-'A'], &word[1], size-=1);
-		printf(",\n");
 	}
 }
 
-void print(struct node* n)
+void print(struct node* n, char* s, int size)
 {
 	if (n->eow)
-		printf("END OF WORD\n");
+	{
+		printf("> %s\n", s);
+		return;
+	}
 
 	int i;
+	char * s2 = (char *)malloc(sizeof(char)*(size+1));
+	for (i = 0; i < size; i++)
+		s2[i] = s[i];
+	size++;
+
 	for (i = 0; i < 26; i++)
 	{
 		if (n->branch[i])
 		{
-			printf("%c\n", (char)(i+'A'));
-			print(n->branch[i]);
+			s2[size-1] = (char)(i+'A');
+			print(n->branch[i], s2, size);
 		}
 	}
+
+	free(s2);
 }
 
 int main()
@@ -78,5 +81,9 @@ int main()
 	add(n, word4, 4);
 	add(n, word5, 3);
 
-	print(n);
+	char *s;
+	print(n, s, 0);
+
+	free(n);
+
 }
