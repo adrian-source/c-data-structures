@@ -28,7 +28,6 @@ char* lcs(char* s1, char* s2)
 			// if characters match
 			if (s1[s1_i] == s2[s2_i])
 			{
-
 				// calculate the incremented length for current sequence
 				int v = l[s1_i][s2_i] + 1;
 
@@ -42,7 +41,6 @@ char* lcs(char* s1, char* s2)
 					longest = v;
 
 					// and clear the set
-					printf(">%s\n", set);
 					memset(set, ' ', strlen(set));
 				}	
 
@@ -56,8 +54,12 @@ char* lcs(char* s1, char* s2)
 			}
 		}
 
+	// free
+	for (i = 0; i < s1_l + 1; i++)
+		free(l[i]);
+	free(l);
 
-
+	// return
 	return set;
 }
 
