@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+/*
+There is a sorted array of infinite numbers (can contain duplicates). 
+Given a number. Find the last occurring instance of that number 
+in the array.
+*/
 int find_last(int* a, int size, int num)
 {
 	
