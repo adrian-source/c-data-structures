@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -7,54 +6,50 @@ struct node{
 	struct node* next;
 
 	int data;
-} *first, *last;
+} *front, *back;
 
 int pop()
 {
-	int tmp;
-	if (first == NULL)
+
+	int temp;
+	if (front == NULL)
 	{
 		return -1;
 	}
-	else if (first == last)
+	else if (front == back)
 	{
-		tmp = first->data;
-		free(first);
-		first = last = NULL;
+		temp = front->data;
+		front = back = NULL;
 	}
 	else
 	{
-		tmp = last->data;
-		free(last);
-		last = last->prev;
+		temp = front->data;
+		front = front->prev;
+		free(front->next);
+		front->next = NULL;
 	}
-	return tmp;
+	return temp;
 }
 
 void push(int data)
 {
 	struct node* newnode = (struct node*)malloc(sizeof(struct node));
 	newnode->data = data;
-	newnode->prev = NULL;
 
-	if (first == NULL)
+	if (front == NULL)
 	{
-		first = last = newnode;
-		first->next = last;
-		first->prev = NULL;
-		last->next = NULL;
-		last->prev = first;
+		front = back = newnode;
+		back->prev = front;
 	}
 	else
 	{
-		newnode->next = first;
-		first->prev = newnode;
-		first = newnode;
+		back->prev = newnode;
+		newnode->next = back;
+		back = newnode;
 	}
-
 }
 
-/*
+
 int main()
 {
 	push(1);
@@ -72,4 +67,3 @@ int main()
 	printf("%d\n", pop());
 	printf("%d\n", pop());
 }
-*/
