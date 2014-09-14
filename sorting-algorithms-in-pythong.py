@@ -48,4 +48,25 @@ def merge(items):
 				raise Exception('Could not merge...')		
 
 #merge(random_items)
+
+def quick(items):
+
+	if len(items) > 1:	
+		pivot_index = len(items)/2
+		smaller_items = []
+		larger_items = []
+
+		for i, val in enumerate(items):
+			if i != pivot_index:
+				if val < items[pivot_index]:
+					smaller_items.append(val)
+				else:
+					larger_items.append(val)
+
+		quick(smaller_items)
+		quick(larger_items)
+		items[:] = smaller_items + [items[pivot_index]] + larger_items
+		
+#quick(random_items)
+
 print random_items
